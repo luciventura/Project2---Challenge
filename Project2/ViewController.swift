@@ -67,7 +67,7 @@ class ViewController: UIViewController {
 
 
     @IBAction func buttonTapped(_ sender: UIButton) {
-        var title: String = "Flags"
+        var title = "Flags"
         
         UIView.animate(withDuration: 0.2, delay: 0, options: []) {
             

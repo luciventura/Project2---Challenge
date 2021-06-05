@@ -19,9 +19,9 @@ class ViewController: UIViewController {
     var questionAsked = 0
  
     
+    //most part of the Buttons was made on the storyboard using Auto Layout
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         countries += ["estonia", "france", "germany" ,"ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us" ]
         
@@ -37,6 +37,7 @@ class ViewController: UIViewController {
         
     }
     
+    
     func askQuestion(action: UIAlertAction! = nil) {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
@@ -47,59 +48,74 @@ class ViewController: UIViewController {
         
         title = "\(countries[correctAnswer].uppercased())"
         
+        //this sets a right bar button that shows how many questions were madee
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "\(questionAsked)", style: .plain, target: self, action: #selector(question))
         
+        //this sets a left bar button that pops up an UIAlertController that shows the score when it's tapped
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Score", style: .plain, target: self, action: #selector(showScore))
-        
     }
     
     @objc func question(sender: UIBarButtonItem) {
         print("something")
-        
     }
     
+    //UIAlertController that was set on the left bar button
     @objc func showScore() {
         let ac = UIAlertController(title: "\(score)", message: nil, preferredStyle: .alert)
                 present(ac, animated: true)
                 ac.addAction(UIAlertAction(title: "Back to the game", style: .cancel))
     }
+
     
-    
-    
-    
+    //this challenge was a little trickier, I had to show the right answer when the user was wrong. I made a couple of elses statements and they worked out well
     @IBAction func buttonTapped(_ sender: UIButton) {
-        var title: String
+        var title: String = "Flags"
         
-        if sender.tag == correctAnswer {
-            title = "Correct, that's \(countries[correctAnswer].uppercased())"
-            score += 1
-            questionAsked += 1
-        } else if sender.tag == 0 {
-            title = "Wrong, that's \(countries[0].uppercased())"
+        UIView.animate(withDuration: 0.2, delay: 0, options: []) {
             
-            questionAsked += 1
-        } else if sender.tag == 1 {
-            title = "Wrong, that's \(countries[1].uppercased())"
+            sender.transform = CGAffineTransform(scaleX: -2, y: -2)
             
-            questionAsked += 1
-        } else if sender.tag == 2 {
-            title = "Wrong, that's \(countries[2].uppercased())"
+            if sender.tag == self.correctAnswer {
+                title = "Correct, that's \(self.countries[self.correctAnswer].uppercased())"
+                self.score += 1
+                self.questionAsked += 1
+                
+            } else {
+                
+                switch sender.tag {
+                case 0:
+                    title = "Wrong, that's \(self.countries[0].uppercased())"
+                    self.score -= 1
+                    self.questionAsked += 1
+                
+                case 1:
+                    title = "Wrong, that's \(self.countries[1].uppercased())"
+                    self.score -= 1
+                    self.questionAsked += 1
+                   
+                    
+                case 2:
+                    title = "Wrong, that's \(self.countries[2].uppercased())"
+                    self.score -= 1
+                    self.questionAsked += 1
+                    
+                default:
+                    title = "Don't know what flag it is"
+                }
+                
+            }
             
-            questionAsked += 1
-        } else {
-            title = "Don't know what flag it is"
+            sender.transform = .identity
         }
         
-    
-            
-        let ac = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .alert)
                
                 present(ac, animated: true)
                 
                 if questionAsked < 10 {
                     ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
             } else if questionAsked == 10 {
-                ac.addAction(UIAlertAction(title: "Your final score is \(score)", style: .default))
+                ac.addAction(UIAlertAction(title: "Your final score is \(score)", style: .default, handler: askQuestion))
                 ac.addAction(UIAlertAction(title: "Play Again", style: .default, handler: askQuestion))
                 score = 0
                 questionAsked = 0
@@ -108,10 +124,6 @@ class ViewController: UIViewController {
                 ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
             
             }
-        
-        
-}
-    
-    
+     }
 }
 

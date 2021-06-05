@@ -37,7 +37,6 @@ class ViewController: UIViewController {
         
     }
     
-    
     func askQuestion(action: UIAlertAction! = nil) {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
@@ -66,8 +65,7 @@ class ViewController: UIViewController {
                 ac.addAction(UIAlertAction(title: "Back to the game", style: .cancel))
     }
 
-    
-    //this challenge was a little trickier, I had to show the right answer when the user was wrong. I made a couple of elses statements and they worked out well
+
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String = "Flags"
         
@@ -124,6 +122,6 @@ class ViewController: UIViewController {
                 ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
             
             }
-     }
+    }
 }
 
